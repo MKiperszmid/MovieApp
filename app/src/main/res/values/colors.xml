@@ -12,4 +12,5 @@
     <color name="ice_blue">#E1F5FF</color>
     <color name="faded_white">#8FFFFFFF</color>
     <color name="dark">#CC1E2B31</color>
+    <color name="transparent">#00000000</color>
 </resources>
