@@ -87,7 +87,7 @@ class DetailFragment : Fragment() {
     private fun getPalette(bitmap: Bitmap) {
         Palette.from(bitmap).generate {
             it?.dominantSwatch?.let { swatch ->
-                fd_background.setColorFilter(swatch.rgb, PorterDuff.Mode.OVERLAY)
+                fd_background.setColorFilter(swatch.rgb, PorterDuff.Mode.LIGHTEN)
                 fd_poster.setColorFilter(swatch.rgb, PorterDuff.Mode.OVERLAY)
             }
         }
