@@ -32,8 +32,10 @@ class ListFragment : Fragment(), PopularMovieAdapter.MovieCallback {
             if (it.isEmpty()) {
                 //TODO: No hay peliculas o hubo un error. Mostrar un mensaje de error
             } else {
+                val movieAdapter = PopularMovieAdapter(it, this@ListFragment, viewModel.genreList.value ?: emptyList())
+                movieAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 fl_movies_recycler.apply {
-                    adapter = PopularMovieAdapter(it, this@ListFragment, viewModel.genreList.value ?: emptyList())
+                    adapter = movieAdapter
                     visibility = View.VISIBLE
                     layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
                 }
