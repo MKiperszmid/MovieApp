@@ -5,6 +5,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface TmdbService {
-    @GET("movie/popular")
+    @GET("tv/popular")
     suspend fun getPopularMovies(): Response<MovieList>
 }
