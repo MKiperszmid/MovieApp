@@ -5,16 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.rs.movieapp.R
 import com.rs.movieapp.model.Genre
-import com.rs.movieapp.model.GenreList
 import com.rs.movieapp.model.Movie
-import com.squareup.picasso.Picasso
+import com.rs.movieapp.util.PicassoUtil
 import jp.wasabeef.picasso.transformations.GrayscaleTransformation
 
-class PopularMovieAdapter(private val movieList: List<Movie>, private val callback: MovieCallback, private val genreList: List<Genre>) :
+class PopularMovieAdapter(
+    private val movieList: List<Movie>,
+    private val callback: MovieCallback,
+    private val genreList: List<Genre>
+) :
     RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularMovieViewHolder {
@@ -29,10 +31,14 @@ class PopularMovieAdapter(private val movieList: List<Movie>, private val callba
         holder.bind(movieList[position])
     }
 
-    class PopularMovieViewHolder(itemView: View, private val callback: MovieCallback, private val genreList: List<Genre>) :
+    class PopularMovieViewHolder(
+        itemView: View,
+        private val callback: MovieCallback,
+        private val genreList: List<Genre>
+    ) :
         RecyclerView.ViewHolder(itemView) {
         fun bind(movie: Movie) {
-            Picasso.get().load("https://image.tmdb.org/t/p/w500/" + movie.backgroundImage)
+            PicassoUtil.getImage(movie.backgroundImage)
                 .transform(GrayscaleTransformation())
                 .into(itemView.findViewById<ImageView>(R.id.pmi_background))
             itemView.findViewById<TextView>(R.id.pmi_title).text = movie.title
@@ -45,7 +51,7 @@ class PopularMovieAdapter(private val movieList: List<Movie>, private val callba
         private fun findGenreName(genresId: List<Int>) {
             if (genresId.isEmpty()) return
 
-            for(genre in genreList) {
+            for (genre in genreList) {
                 if (genre.id == genresId[0]) {
                     itemView.findViewById<TextView>(R.id.pmi_genre).apply {
                         visibility = View.VISIBLE
