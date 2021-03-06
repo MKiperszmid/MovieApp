@@ -5,19 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.rs.movieapp.R
+import com.rs.movieapp.model.Genre
+import com.rs.movieapp.model.GenreList
 import com.rs.movieapp.model.Movie
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.GrayscaleTransformation
 
-class PopularMovieAdapter(private val movieList: List<Movie>, private val callback: MovieCallback) :
+class PopularMovieAdapter(private val movieList: List<Movie>, private val callback: MovieCallback, private val genreList: List<Genre>) :
     RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularMovieViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val items = layoutInflater.inflate(R.layout.popularmovie_item, parent, false)
-        return PopularMovieViewHolder(items, callback)
+        return PopularMovieViewHolder(items, callback, genreList)
     }
 
     override fun getItemCount(): Int = movieList.size
@@ -26,16 +29,29 @@ class PopularMovieAdapter(private val movieList: List<Movie>, private val callba
         holder.bind(movieList[position])
     }
 
-    class PopularMovieViewHolder(itemView: View, private val callback: MovieCallback) :
+    class PopularMovieViewHolder(itemView: View, private val callback: MovieCallback, private val genreList: List<Genre>) :
         RecyclerView.ViewHolder(itemView) {
         fun bind(movie: Movie) {
             Picasso.get().load("https://image.tmdb.org/t/p/w500/" + movie.backgroundImage)
                 .transform(GrayscaleTransformation())
                 .into(itemView.findViewById<ImageView>(R.id.pmi_background))
             itemView.findViewById<TextView>(R.id.pmi_title).text = movie.title
-            itemView.findViewById<TextView>(R.id.pmi_genre).text = "Placeholder"
+            findGenreName(movie.genres)
             itemView.setOnClickListener {
                 callback.movieClicked(movie)
+            }
+        }
+
+        private fun findGenreName(genresId: List<Int>) {
+            if (genresId.isEmpty()) return
+
+            for(genre in genreList) {
+                if (genre.id == genresId[0]) {
+                    itemView.findViewById<TextView>(R.id.pmi_genre).apply {
+                        visibility = View.VISIBLE
+                        text = genre.name
+                    }
+                }
             }
         }
     }
