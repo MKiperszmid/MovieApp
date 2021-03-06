@@ -4,24 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ListFragment"
+    android:background="@color/main_background"
+    android:paddingStart="17dp"
     android:paddingTop="16dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:paddingEnd="25dp"
+    tools:context=".view.ListFragment">
 
     <TextView
         android:id="@+id/fl_movies_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Todas"
+        android:textColor="@color/faded_white"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fl_movies_recycler"
         android:layout_width="match_parent"
-        android:layout_marginTop="16dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fl_movies_label" />

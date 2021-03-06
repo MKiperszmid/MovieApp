@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rs.movieapp.R
 import com.rs.movieapp.model.Movie
 import com.squareup.picasso.Picasso
+import jp.wasabeef.picasso.transformations.GrayscaleTransformation
 
 class PopularMovieAdapter(val movieList: List<Movie>) :
     RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
@@ -27,7 +28,8 @@ class PopularMovieAdapter(val movieList: List<Movie>) :
 
     class PopularMovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(movie: Movie) {
-            Picasso.get().load("https://image.tmdb.org/t/p/w500/" + movie.backgroundImage).into(itemView.findViewById<ImageView>(R.id.pmi_background))
+            Picasso.get().load("https://image.tmdb.org/t/p/w500/" + movie.backgroundImage)
+                .transform(GrayscaleTransformation()).into(itemView.findViewById<ImageView>(R.id.pmi_background))
             itemView.findViewById<TextView>(R.id.pmi_title).text = movie.title
             itemView.findViewById<TextView>(R.id.pmi_genre).text = "Placeholder"
         }
