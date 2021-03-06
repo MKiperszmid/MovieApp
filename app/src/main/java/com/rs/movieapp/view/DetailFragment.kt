@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,7 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_detail, container, false)
+        return inflater.inflate(R.layout.fragment_detail_motion, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,7 +92,10 @@ class DetailFragment : Fragment() {
         fd_subscribe.setOnClickListener {
             Toast.makeText(requireContext(), "Not yet implemented", Toast.LENGTH_SHORT).show()
         }
-        fd_overview.text = movie.overview
+        fd_overview.apply {
+            text = movie.overview
+            movementMethod = ScrollingMovementMethod()
+        }
     }
 
     private fun getPalette(bitmap: Bitmap) {
