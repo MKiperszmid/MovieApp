@@ -1,28 +1,17 @@
 package com.rs.movieapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.Observer
-import androidx.lifecycle.liveData
-import com.rs.movieapp.networking.RetrofitClient
-import com.rs.movieapp.networking.TmdbService
+import androidx.appcompat.app.AppCompatActivity
+import com.rs.movieapp.view.ListFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val retrofit = RetrofitClient.getService().create(TmdbService::class.java)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.am_fragment_container, ListFragment())
+        transaction.commit()
 
-        val response = liveData {
-            emit(retrofit.getPopularMovies())
-        }
-
-        response.observe(this, Observer {
-            val movies = it.body()?.movies ?: emptyList()
-            if (movies.isNotEmpty()) {
-
-            }
-        })
     }
 }
