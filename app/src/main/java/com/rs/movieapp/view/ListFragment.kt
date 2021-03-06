@@ -33,7 +33,7 @@ class ListFragment : Fragment(), PopularMovieAdapter.MovieCallback {
                 //TODO: No hay peliculas o hubo un error. Mostrar un mensaje de error
             } else {
                 fl_movies_recycler.apply {
-                    adapter = PopularMovieAdapter(it, this@ListFragment)
+                    adapter = PopularMovieAdapter(it, this@ListFragment, viewModel.genreList.value ?: emptyList())
                     visibility = View.VISIBLE
                     layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
                 }
