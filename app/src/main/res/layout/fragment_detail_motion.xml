@@ -2,13 +2,22 @@
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fd_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/fragment_detail_motion_scene"
     tools:background="@color/teal_200"
     tools:context=".view.DetailFragment">
 
+    <ImageView
+        android:id="@+id/fd_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/tvplaceholder" />
 
     <ImageView
         android:id="@+id/fd_back"
@@ -31,7 +40,7 @@
         app:layout_constraintStart_toStartOf="@id/fd_subscribe"
         app:layout_constraintTop_toBottomOf="@id/fd_back"
         app:shapeAppearanceOverlay="@style/CornerImage"
-        tools:src="@drawable/superman" />
+        tools:src="@drawable/tvplaceholder" />
 
     <TextView
         android:id="@+id/fd_title"
@@ -100,8 +109,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
-        android:textColor="@color/white"
         android:scrollbars="horizontal"
+        android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

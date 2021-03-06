@@ -1,7 +1,7 @@
 package com.rs.movieapp.view
 
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
@@ -16,11 +16,10 @@ import androidx.palette.graphics.Palette
 import com.rs.movieapp.R
 import com.rs.movieapp.model.Movie
 import com.rs.movieapp.util.PicassoUtil
-import com.rs.movieapp.utils.BitmapUtils
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import jp.wasabeef.picasso.transformations.GrayscaleTransformation
-import kotlinx.android.synthetic.main.fragment_detail.*
+import kotlinx.android.synthetic.main.fragment_detail_motion.*
 
 
 class DetailFragment : Fragment() {
@@ -47,45 +46,32 @@ class DetailFragment : Fragment() {
     }
 
     private fun loadPoster(posterUrl: String) {
-        PicassoUtil.getImage(posterUrl)
-            .into(object : Target {
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    //
-                }
+        PicassoUtil.getImage(posterUrl).placeholder(R.drawable.tvplaceholder).into(object : Target {
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                //
+            }
 
-                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                    //
-                }
+            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                //
+            }
 
-                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                    bitmap?.let {
-                        fd_poster.setImageBitmap(BitmapUtils.toGrayscale(it))
-                        getPalette(it)
-                    }
-                }
-            })
-    }
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                bitmap?.let {
 
-    private fun loadBackground(backgroundUrl: String) {
-        PicassoUtil.getImage(backgroundUrl).transform(GrayscaleTransformation())
-            .into(object : Target {
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    //
+                    //fd_poster.setImageBitmap(BitmapUtils.toGrayscale(it))
+                    getPalette(it)
                 }
-
-                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                    //
-                }
-
-                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                    fd_background.background = BitmapDrawable(resources, bitmap)
-                }
-            })
+            }
+        })
     }
 
     private fun drawMovie(movie: Movie) {
         loadPoster(movie.posterImage)
-        loadBackground(movie.backgroundImage)
+        PicassoUtil.getImage(movie.posterImage).placeholder(R.drawable.tvplaceholder)
+            .transform(GrayscaleTransformation()).into(fd_poster)
+
+        PicassoUtil.getImage(movie.backgroundImage).placeholder(R.drawable.tvplaceholder)
+            .transform(GrayscaleTransformation()).into(fd_background)
 
         fd_title.text = movie.title
         fd_year.text = movie.getYear().toString()
@@ -99,10 +85,11 @@ class DetailFragment : Fragment() {
     }
 
     private fun getPalette(bitmap: Bitmap) {
-        val colors = Palette.from(bitmap).generate()
-        colors.dominantSwatch?.let { swatch ->
-            //TODO: Set filter for background and poster images
-            //fd_background.setBackgroundColor(swatch.rgb)
+        Palette.from(bitmap).generate {
+            it?.dominantSwatch?.let { swatch ->
+                fd_background.setColorFilter(swatch.rgb, PorterDuff.Mode.OVERLAY)
+                fd_poster.setColorFilter(swatch.rgb, PorterDuff.Mode.OVERLAY)
+            }
         }
     }
 }
