@@ -14,6 +14,12 @@ data class Movie (
     val overview: String,
     @SerializedName("poster_path")
     val posterImage: String,
-    @SerializedName("release_date")
+    @SerializedName("first_air_date")
     private val releaseDate: Date
-)
+) {
+    fun getYear(): Int {
+        val calendar = Calendar.getInstance()
+        calendar.time = releaseDate
+        return calendar.get(Calendar.YEAR)
+    }
+}
