@@ -28,7 +28,5 @@ class ListFragment : Fragment() {
 
             }
         })
-
-        viewModel.getPopularMovies()
     }
 }
