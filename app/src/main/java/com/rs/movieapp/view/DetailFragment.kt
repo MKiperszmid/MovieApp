@@ -1,23 +1,25 @@
 package com.rs.movieapp.view
 
+import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.palette.graphics.Palette
 import com.rs.movieapp.R
 import com.rs.movieapp.model.Movie
+import com.rs.movieapp.utils.BitmapUtils
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import jp.wasabeef.picasso.transformations.GrayscaleTransformation
 import kotlinx.android.synthetic.main.fragment_detail.*
-import kotlinx.android.synthetic.main.fragment_detail.view.*
-import kotlinx.android.synthetic.main.fragment_list.*
+
 
 class DetailFragment : Fragment() {
     private lateinit var viewModel: MovieViewModel
@@ -42,16 +44,61 @@ class DetailFragment : Fragment() {
         }
     }
 
+    private fun loadPoster(posterUrl: String) {
+        Picasso.get().load("https://image.tmdb.org/t/p/w500/$posterUrl")
+            .into(object : Target {
+                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                    //
+                }
+
+                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                    //
+                }
+
+                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                    bitmap?.let {
+                        fd_poster.setImageBitmap(BitmapUtils.toGrayscale(it))
+                        getPalette(it)
+                    }
+                }
+            })
+    }
+
+    private fun loadBackground(backgroundUrl: String) {
+        Picasso.get().load("https://image.tmdb.org/t/p/w500/$backgroundUrl").transform(
+            GrayscaleTransformation()
+        ).into(object : Target {
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                //
+            }
+
+            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                //
+            }
+
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                fd_background.background = BitmapDrawable(resources, bitmap)
+            }
+        })
+    }
+
     private fun drawMovie(movie: Movie) {
-        Picasso.get()
-            .load("https://image.tmdb.org/t/p/w500/" + movie.posterImage).into(fd_poster)
+        loadPoster(movie.posterImage)
+        loadBackground(movie.backgroundImage)
+
         fd_title.text = movie.title
         fd_year.text = movie.getYear().toString()
         fd_subscribe.setOnClickListener {
             Toast.makeText(requireContext(), "Not yet implemented", Toast.LENGTH_SHORT).show()
         }
         fd_overview.text = movie.overview
+    }
 
-
+    private fun getPalette(bitmap: Bitmap) {
+        val colors = Palette.from(bitmap).generate()
+        colors.dominantSwatch?.let { swatch ->
+            //TODO: Set filter for background and poster images
+            //fd_background.setBackgroundColor(swatch.rgb)
+        }
     }
 }
