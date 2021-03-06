@@ -1,6 +1,6 @@
 package com.rs.movieapp.view
 
-import android.graphics.*
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
 import com.rs.movieapp.R
 import com.rs.movieapp.model.Movie
+import com.rs.movieapp.util.PicassoUtil
 import com.rs.movieapp.utils.BitmapUtils
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
@@ -45,7 +46,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun loadPoster(posterUrl: String) {
-        Picasso.get().load("https://image.tmdb.org/t/p/w500/$posterUrl")
+        PicassoUtil.getImage(posterUrl)
             .into(object : Target {
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                     //
@@ -65,21 +66,20 @@ class DetailFragment : Fragment() {
     }
 
     private fun loadBackground(backgroundUrl: String) {
-        Picasso.get().load("https://image.tmdb.org/t/p/w500/$backgroundUrl").transform(
-            GrayscaleTransformation()
-        ).into(object : Target {
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                //
-            }
+        PicassoUtil.getImage(backgroundUrl).transform(GrayscaleTransformation())
+            .into(object : Target {
+                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                    //
+                }
 
-            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                //
-            }
+                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                    //
+                }
 
-            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                fd_background.background = BitmapDrawable(resources, bitmap)
-            }
-        })
+                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                    fd_background.background = BitmapDrawable(resources, bitmap)
+                }
+            })
     }
 
     private fun drawMovie(movie: Movie) {
