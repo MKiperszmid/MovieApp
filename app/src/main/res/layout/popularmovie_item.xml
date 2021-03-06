@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="156dp"
     android:layout_marginBottom="16dp">
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="175dp"
-        app:cardCornerRadius="5dp"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,14 +21,22 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_movie"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/pmi_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|start"
             android:padding="16dp"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textColor="@color/ice_blue"
+            android:textSize="24sp"
             android:textStyle="bold"
             tools:text="Supergirl" />
 
@@ -37,13 +46,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_margin="10dp"
-            android:paddingStart="16dp"
+            android:background="@drawable/genre_background"
+            android:paddingStart="15dp"
             android:paddingTop="4dp"
-            android:paddingEnd="16dp"
+            android:paddingEnd="15dp"
             android:paddingBottom="4dp"
+            android:textAllCaps="true"
             android:textColor="@color/white"
+            android:textSize="12sp"
             tools:text="Adventure" />
-    </androidx.cardview.widget.CardView>
 
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
