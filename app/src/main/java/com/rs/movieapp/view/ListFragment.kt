@@ -28,7 +28,7 @@ class ListFragment : Fragment(), PopularMovieAdapter.MovieCallback {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity())[MovieViewModel::class.java]
 
-        viewModel.movies.observe(requireActivity(), Observer {
+        viewModel.movies.observe(viewLifecycleOwner, Observer {
             if (it.isEmpty()) {
                 //TODO: No hay peliculas o hubo un error. Mostrar un mensaje de error
             } else {
