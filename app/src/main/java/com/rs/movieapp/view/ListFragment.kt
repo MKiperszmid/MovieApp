@@ -121,6 +121,6 @@ class ListFragment : Fragment(), PopularMovieAdapter.MovieCallback {
     override fun movieClicked(movie: Movie) {
         viewModel.movie.value = movie
         requireFragmentManager().beginTransaction()
-            .replace(R.id.am_fragment_container, DetailFragment()).addToBackStack(null).commit()
+            .add(R.id.am_fragment_container, DetailFragment()).addToBackStack(null).commit()
     }
 }
