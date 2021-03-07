@@ -82,8 +82,7 @@ class DetailFragment : Fragment() {
         fd_title.text = movie.title
         fd_year.text = movie.getYear().toString()
         fd_subscribe.setOnClickListener {
-            val newMovie = movie.copy()
-            newMovie.saved = true
+            val newMovie = movie.copy(saved = true)
             viewModel.saveMovie(newMovie)
         }
         fd_overview.apply {
