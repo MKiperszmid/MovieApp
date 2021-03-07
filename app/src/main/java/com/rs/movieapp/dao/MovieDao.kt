@@ -9,9 +9,6 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveMovie(movie: Movie)
 
-    @Update
-    suspend fun updateMovie(movie: Movie)
-
     @Delete
     suspend fun deleteMovie(movie: Movie)
 

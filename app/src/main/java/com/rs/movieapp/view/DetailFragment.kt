@@ -81,14 +81,30 @@ class DetailFragment : Fragment() {
 
         fd_title.text = movie.title
         fd_year.text = movie.getYear().toString()
-        fd_subscribe.setOnClickListener {
-            val newMovie = movie.copy(saved = true)
-            viewModel.saveMovie(newMovie)
-        }
+
+        drawSubscribeButton(movie)
+
         fd_overview.apply {
             text = movie.overview
             movementMethod = ScrollingMovementMethod()
         }
+    }
+
+    private fun drawSubscribeButton(movie: Movie) {
+        fd_subscribe.setOnClickListener {
+            subscribe(movie)
+        }
+    }
+
+    private fun subscribe(movie: Movie) {
+        val newMovie = movie.copy(saved = true)
+        viewModel.saveMovie(newMovie)
+        //TODO: Ocultar boton y mostrar boton de suscripto
+    }
+
+    private fun unsubscribe(movie: Movie) {
+        viewModel.deleteMovie(movie)
+        //TODO: Ocultar boton y mostrar boton de suscribir
     }
 
     private fun getPalette(bitmap: Bitmap) {

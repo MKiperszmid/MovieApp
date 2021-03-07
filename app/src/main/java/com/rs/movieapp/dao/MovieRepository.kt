@@ -8,10 +8,6 @@ class MovieRepository(private val movieDao: MovieDao) {
         movieDao.saveMovie(movie)
     }
 
-    suspend fun updateMovie(movie: Movie) {
-        movieDao.updateMovie(movie)
-    }
-
     suspend fun deleteMovie(movie: Movie) {
         movieDao.deleteMovie(movie)
     }

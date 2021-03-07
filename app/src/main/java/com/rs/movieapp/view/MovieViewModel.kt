@@ -38,13 +38,7 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
         }
     }
 
-    fun updateMovie(movie: Movie) {
-        viewModelScope.launch {
-            repository.updateMovie(movie)
-        }
-    }
-
-    fun deleteeMovie(movie: Movie) {
+    fun deleteMovie(movie: Movie) {
         viewModelScope.launch {
             repository.deleteMovie(movie)
         }
