@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutDescription="@xml/fragment_detail_motion_scene"
     android:background="@color/black"
+    app:layoutDescription="@xml/fragment_detail_motion_updated_scene"
     tools:context=".view.DetailFragment">
 
     <ImageView
         android:id="@+id/fd_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
         android:alpha="0.2"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,11 +34,11 @@
         android:id="@+id/fd_poster"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
         android:adjustViewBounds="true"
-        app:layout_constraintEnd_toEndOf="@id/fd_subscribe"
-        app:layout_constraintStart_toStartOf="@id/fd_subscribe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fd_back"
         app:shapeAppearanceOverlay="@style/CornerImage"
         tools:src="@drawable/tvplaceholder" />
@@ -70,25 +70,60 @@
         app:layout_constraintTop_toBottomOf="@id/fd_title"
         tools:text="2011" />
 
-    <TextView
-        android:id="@+id/fd_subscribe"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fd_suscription_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
-        android:background="@drawable/subscribe_button"
-        android:gravity="center"
-        android:paddingStart="40dp"
-        android:paddingTop="14dp"
-        android:paddingEnd="40dp"
-        android:paddingBottom="14dp"
-        android:text="Suscribirme"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fd_year" />
+        app:layout_constraintTop_toBottomOf="@id/fd_year">
+
+        <TextView
+            android:id="@+id/fd_subscribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/subscribe_button"
+            android:gravity="center"
+            android:paddingStart="40dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="40dp"
+            android:paddingBottom="14dp"
+            android:text="Suscribirme"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <it.gilvegliach.android.transparenttexttextview.TransparentTextTextView
+            android:id="@+id/fd_subscribed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/subscribed_button"
+            android:gravity="center"
+            android:paddingStart="40dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="40dp"
+            android:paddingBottom="14dp"
+            android:text="Suscripto"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/fd_overview_label"
@@ -102,7 +137,7 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/fd_back"
-        app:layout_constraintTop_toBottomOf="@id/fd_subscribe" />
+        app:layout_constraintTop_toBottomOf="@id/fd_suscription_container" />
 
     <TextView
         android:id="@+id/fd_overview"

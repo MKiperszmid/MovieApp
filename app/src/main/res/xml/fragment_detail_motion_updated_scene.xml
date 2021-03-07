@@ -16,6 +16,10 @@
                motion:motionTarget="@+id/fd_year"
                motion:framePosition="100"
                android:alpha="0" />
+           <KeyAttribute
+               motion:motionTarget="@+id/fd_suscription_container"
+               motion:framePosition="100"
+               android:alpha="0.45" />
        </KeyFrameSet>
         <OnSwipe
             motion:touchAnchorId="@+id/fd_poster"
@@ -27,33 +31,32 @@
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
-            motion:layout_constraintEnd_toEndOf="@id/fd_subscribe"
+            motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="70dp"
+            android:layout_marginEnd="185dp"
             motion:layout_constraintTop_toBottomOf="@id/fd_back"
-            android:layout_marginStart="70dp"
-            motion:layout_constraintStart_toStartOf="@id/fd_subscribe"
+            android:layout_marginStart="185dp"
+            motion:layout_constraintStart_toStartOf="parent"
             android:id="@+id/fd_poster"
             android:translationY="-30dp" />
         <Constraint
-            android:id="@+id/fd_title"
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             motion:layout_constraintTop_toBottomOf="@id/fd_poster"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="0dp"
-            android:translationY="-30dp"
-            android:layout_marginStart="0dp" />
+            android:id="@+id/fd_title"
+            android:translationY="-30dp" />
         <Constraint
-            android:id="@+id/fd_year"
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             motion:layout_constraintTop_toBottomOf="@id/fd_title"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="0dp"
+            android:id="@+id/fd_year"
             android:translationY="-30dp" />
         <Constraint
             motion:layout_constraintEnd_toEndOf="parent"
@@ -62,14 +65,25 @@
             motion:layout_constraintTop_toBottomOf="@id/fd_year"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="0dp"
-            android:id="@+id/fd_subscribe"
-            android:translationY="-40dp" />
+            android:id="@+id/fd_suscription_container"
+            android:translationY="-50dp" />
         <Constraint
             motion:layout_constraintStart_toEndOf="@id/fd_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            motion:layout_constraintTop_toBottomOf="@id/fd_subscribe"
+            motion:layout_constraintTop_toBottomOf="@id/fd_suscription_container"
             android:layout_marginTop="0dp"
-            android:id="@+id/fd_overview_label" />
+            android:id="@+id/fd_overview_label"
+            android:translationY="-30dp" />
+        <Constraint
+            android:id="@+id/fd_overview"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            motion:layout_constraintTop_toBottomOf="@id/fd_overview_label"
+            motion:layout_constraintStart_toStartOf="@id/fd_overview_label"
+            android:layout_marginTop="20dp"
+            android:translationY="-30dp" />
     </ConstraintSet>
 </MotionScene>

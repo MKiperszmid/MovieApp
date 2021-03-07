@@ -72,6 +72,7 @@ dependencies {
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
     implementation "androidx.recyclerview:recyclerview:1.2.0-beta02"
+    implementation 'it.gilvegliach.android:transparent-text-textview:1.0.3'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
