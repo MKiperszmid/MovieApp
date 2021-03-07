@@ -13,16 +13,16 @@ import com.rs.movieapp.util.PicassoUtil
 import jp.wasabeef.picasso.transformations.GrayscaleTransformation
 
 class PopularMovieAdapter(
-    private val movieList: List<Movie>,
+    private val movieList: MutableList<Movie>,
     private val callback: MovieCallback,
-    private val genreList: List<Genre>
+    private val viewModel: MovieViewModel
 ) :
     RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularMovieViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val items = layoutInflater.inflate(R.layout.popularmovie_item, parent, false)
-        return PopularMovieViewHolder(items, callback, genreList)
+        return PopularMovieViewHolder(items, callback, viewModel)
     }
 
     override fun getItemCount(): Int = movieList.size
@@ -31,10 +31,15 @@ class PopularMovieAdapter(
         holder.bind(movieList[position])
     }
 
+    fun addMovies(movies: List<Movie>) {
+        movieList.addAll(movies)
+        notifyDataSetChanged()
+    }
+
     class PopularMovieViewHolder(
         itemView: View,
         private val callback: MovieCallback,
-        private val genreList: List<Genre>
+        private val viewModel: MovieViewModel
     ) :
         RecyclerView.ViewHolder(itemView) {
         fun bind(movie: Movie) {
@@ -51,7 +56,7 @@ class PopularMovieAdapter(
         private fun findGenreName(genresId: List<Int>) {
             if (genresId.isEmpty()) return
 
-            for (genre in genreList) {
+            for (genre in viewModel.genreList.value ?: emptyList()) {
                 if (genre.id == genresId[0]) {
                     itemView.findViewById<TextView>(R.id.pmi_genre).apply {
                         visibility = View.VISIBLE

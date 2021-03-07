@@ -2,7 +2,6 @@ package com.rs.movieapp.view
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.rs.movieapp.dao.MovieRepository
 import com.rs.movieapp.model.Genre
@@ -19,16 +18,22 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
 
     val movie = MutableLiveData<Movie>()
     val genreList = MutableLiveData<List<Genre>>()
+    val popularMovies = MutableLiveData<List<Movie>>()
+    val loading = MutableLiveData<Boolean>()
 
     val savedMovies = repository.movies
+    private var currentPage = 1
+    private var hasContent = true
 
     init {
         updateGenres()
+        getPopularMovies()
     }
 
     private fun updateGenres() {
         viewModelScope.launch(Dispatchers.IO) {
-            genreList.postValue(service.getGenres().body()?.genres ?: emptyList())
+            val genres = service.getGenres().body()?.genres ?: emptyList()
+            genreList.postValue(genres)
         }
     }
 
@@ -44,9 +49,22 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
         }
     }
 
-    fun isMovieInSaved(id: Int): Boolean = savedMovies.value?.firstOrNull { x -> x.id == id } != null
-
-    val movies = liveData<List<Movie>>(Dispatchers.IO) {
-        emit(service.getPopularMovies().body()?.movies ?: emptyList())
+    fun getPopularMovies() {
+        if (hasContent) {
+            viewModelScope.launch(Dispatchers.IO) {
+                loading.postValue(true)
+                var latestMovies = emptyList<Movie>()
+                val movieList = service.getPopularMovies(currentPage++).body()
+                if (movieList != null) {
+                    latestMovies = movieList.movies
+                    hasContent = movieList.totalPages >= currentPage
+                }
+                loading.postValue(false)
+                popularMovies.postValue(latestMovies)
+            }
+        }
     }
+
+    fun isMovieInSaved(id: Int): Boolean =
+        savedMovies.value?.firstOrNull { x -> x.id == id } != null
 }
