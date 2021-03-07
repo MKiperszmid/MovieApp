@@ -81,9 +81,7 @@ class DetailFragment : Fragment() {
 
         fd_title.text = movie.title
         fd_year.text = movie.getYear().toString()
-
         drawSubscribeButton(movie)
-
         fd_overview.apply {
             text = movie.overview
             movementMethod = ScrollingMovementMethod()
