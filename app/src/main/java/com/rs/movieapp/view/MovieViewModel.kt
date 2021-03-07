@@ -44,6 +44,8 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
         }
     }
 
+    fun isMovieInSaved(id: Int): Boolean = savedMovies.value?.firstOrNull { x -> x.id == id } != null
+
     val movies = liveData<List<Movie>>(Dispatchers.IO) {
         emit(service.getPopularMovies().body()?.movies ?: emptyList())
     }

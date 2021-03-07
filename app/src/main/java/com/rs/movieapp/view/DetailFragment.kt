@@ -8,7 +8,6 @@ import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,8 +21,7 @@ import com.rs.movieapp.util.PicassoUtil
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import jp.wasabeef.picasso.transformations.GrayscaleTransformation
-import kotlinx.android.synthetic.main.fragment_detail_motion.*
-
+import kotlinx.android.synthetic.main.fragment_detail_motion_updated.*
 
 class DetailFragment : Fragment() {
     private lateinit var viewModel: MovieViewModel
@@ -32,7 +30,7 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_detail_motion, container, false)
+        return inflater.inflate(R.layout.fragment_detail_motion_updated, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,20 +87,32 @@ class DetailFragment : Fragment() {
     }
 
     private fun drawSubscribeButton(movie: Movie) {
+        if (viewModel.isMovieInSaved(movie.id)) {
+            fd_subscribed.visibility = View.VISIBLE
+        } else {
+            fd_subscribe.visibility = View.VISIBLE
+        }
+
         fd_subscribe.setOnClickListener {
             subscribe(movie)
+        }
+
+        fd_subscribed.setOnClickListener {
+            unsubscribe(movie)
         }
     }
 
     private fun subscribe(movie: Movie) {
         val newMovie = movie.copy(saved = true)
         viewModel.saveMovie(newMovie)
-        //TODO: Ocultar boton y mostrar boton de suscripto
+        fd_subscribe.visibility = View.GONE
+        fd_subscribed.visibility = View.VISIBLE
     }
 
     private fun unsubscribe(movie: Movie) {
         viewModel.deleteMovie(movie)
-        //TODO: Ocultar boton y mostrar boton de suscribir
+        fd_subscribe.visibility = View.VISIBLE
+        fd_subscribed.visibility = View.GONE
     }
 
     private fun getPalette(bitmap: Bitmap) {

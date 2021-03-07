@@ -65,6 +65,8 @@ class ListFragment : Fragment(), PopularMovieAdapter.MovieCallback {
                     layoutManager =
                         LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
                 }
+            } else {
+                fl_saved_container.visibility = View.GONE
             }
         })
 
