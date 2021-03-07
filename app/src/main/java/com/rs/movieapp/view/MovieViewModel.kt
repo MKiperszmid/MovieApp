@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.rs.movieapp.dao.MovieRepository
 import com.rs.movieapp.model.Genre
 import com.rs.movieapp.model.Movie
 import com.rs.movieapp.networking.RetrofitClient
@@ -11,13 +12,15 @@ import com.rs.movieapp.networking.TmdbService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MovieViewModel : ViewModel() {
+class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
     companion object {
         val service = RetrofitClient.getService().create(TmdbService::class.java)
     }
 
     val movie = MutableLiveData<Movie>()
     val genreList = MutableLiveData<List<Genre>>()
+
+    val savedMovies = repository.movies
 
     init {
         updateGenres()
@@ -26,6 +29,24 @@ class MovieViewModel : ViewModel() {
     private fun updateGenres() {
         viewModelScope.launch(Dispatchers.IO) {
             genreList.postValue(service.getGenres().body()?.genres ?: emptyList())
+        }
+    }
+
+    fun saveMovie(movie: Movie) {
+        viewModelScope.launch {
+            repository.saveMovie(movie)
+        }
+    }
+
+    fun updateMovie(movie: Movie) {
+        viewModelScope.launch {
+            repository.updateMovie(movie)
+        }
+    }
+
+    fun deleteeMovie(movie: Movie) {
+        viewModelScope.launch {
+            repository.deleteMovie(movie)
         }
     }
 
