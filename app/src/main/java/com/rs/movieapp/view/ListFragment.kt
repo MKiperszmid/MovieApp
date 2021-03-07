@@ -20,6 +20,10 @@ class ListFragment : Fragment(), PopularMovieAdapter.MovieCallback {
     private lateinit var viewModel: MovieViewModel
     private var isLoading = true
 
+    companion object {
+        const val ITEMS_BEFORE_REQUESTING_MORE = 5
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -77,7 +81,7 @@ class ListFragment : Fragment(), PopularMovieAdapter.MovieCallback {
                     val manager = recyclerView.layoutManager as LinearLayoutManager
                     val initPos = manager.findLastVisibleItemPosition()
                     val finalPos = manager.itemCount
-                    if (finalPos - initPos <= 5) {
+                    if (finalPos - initPos <= ITEMS_BEFORE_REQUESTING_MORE) {
                         viewModel.getPopularMovies()
                         isLoading = true
                     }

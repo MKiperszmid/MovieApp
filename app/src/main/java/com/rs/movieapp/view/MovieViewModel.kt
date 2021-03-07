@@ -22,7 +22,7 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
     val loading = MutableLiveData<Boolean>()
 
     val savedMovies = repository.movies
-    private var currentPage = 4
+    private var currentPage = 1
     private var hasContent = true
 
     init {
