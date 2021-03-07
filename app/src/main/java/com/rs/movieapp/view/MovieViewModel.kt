@@ -10,6 +10,7 @@ import com.rs.movieapp.networking.RetrofitClient
 import com.rs.movieapp.networking.TmdbService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
     companion object {
@@ -32,8 +33,13 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
 
     private fun updateGenres() {
         viewModelScope.launch(Dispatchers.IO) {
-            val genres = service.getGenres().body()?.genres ?: emptyList()
-            genreList.postValue(genres)
+            var result = emptyList<Genre>()
+            try {
+                result = service.getGenres().body()?.genres ?: emptyList()
+            } catch (e: Exception) {
+                //TODO: Error de Servicio
+            }
+            genreList.postValue(result)
         }
     }
 
@@ -54,13 +60,17 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
             viewModelScope.launch(Dispatchers.IO) {
                 loading.postValue(true)
                 var latestMovies = emptyList<Movie>()
-                val movieList = service.getPopularMovies(currentPage++).body()
-                if (movieList != null) {
-                    latestMovies = movieList.movies
-                    hasContent = movieList.totalPages >= currentPage
+                try {
+                    val movieList = service.getPopularMovies(currentPage++).body()
+                    if (movieList != null) {
+                        latestMovies = movieList.movies
+                        hasContent = movieList.totalPages >= currentPage
+                    }
+                } catch (e: Exception) {
+                    //TODO: Error de Servicio
                 }
-                loading.postValue(false)
                 popularMovies.postValue(latestMovies)
+                loading.postValue(false)
             }
         }
     }
