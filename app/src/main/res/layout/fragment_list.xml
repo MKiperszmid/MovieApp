@@ -25,6 +25,7 @@
             android:id="@+id/fd_saved_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="13dp"
             android:text="Suscriptas"
             android:textAllCaps="true"
             android:textColor="@color/faded_white"
@@ -34,8 +35,8 @@
             android:id="@+id/fl_saved_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:layout_marginBottom="25dp" />
+            android:layout_marginBottom="25dp"
+            android:overScrollMode="never" />
 
     </LinearLayout>
 
@@ -66,8 +67,21 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fl_movies_recycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:overScrollMode="never" />
 
     </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/fl_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

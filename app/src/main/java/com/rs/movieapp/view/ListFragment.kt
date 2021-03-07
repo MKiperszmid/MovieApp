@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_list.*
 
 class ListFragment : Fragment(), PopularMovieAdapter.MovieCallback {
     private lateinit var viewModel: MovieViewModel
+    private var isLoading = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,37 +32,79 @@ class ListFragment : Fragment(), PopularMovieAdapter.MovieCallback {
         val dao = MovieDatabase.instance(requireActivity().application).movieDao
         val repository = MovieRepository(dao)
         val factory = MovieViewmodelFactory(repository)
-
         viewModel = ViewModelProvider(requireActivity(), factory)[MovieViewModel::class.java]
-        viewModel.movies.observe(viewLifecycleOwner, Observer {
-            if (it.isEmpty()) {
-                //TODO: No hay peliculas o hubo un error. Mostrar un mensaje de error
-            } else {
-                fl_movies_container.visibility = View.VISIBLE
-                val movieAdapter = PopularMovieAdapter(
-                    it,
-                    this@ListFragment,
-                    viewModel.genreList.value ?: emptyList()
-                )
-                movieAdapter.stateRestorationPolicy =
-                    RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-                fl_movies_recycler.apply {
-                    adapter = movieAdapter
-                    visibility = View.VISIBLE
-                    layoutManager =
-                        LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+
+        viewModel.loading.observe(viewLifecycleOwner, Observer {
+            var newVisibility = View.GONE
+            var newIndeterminate = false
+            if (it) {
+                newVisibility = View.VISIBLE
+                newIndeterminate = true
+            }
+            fl_progress.apply {
+                visibility = newVisibility
+                isIndeterminate = newIndeterminate
+            }
+        })
+
+        drawPopularMovies()
+        drawSavedMovies()
+
+    }
+
+    private fun getPopularMoviesAdapter(): PopularMovieAdapter {
+        val popularMovieAdapter = PopularMovieAdapter(
+            mutableListOf(),
+            this@ListFragment,
+            viewModel
+        )
+        popularMovieAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        return popularMovieAdapter
+    }
+
+    private fun drawPopularMovies() {
+        val popularMovieAdapter = getPopularMoviesAdapter()
+        fl_movies_recycler.apply {
+            adapter = popularMovieAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        }
+
+        fl_movies_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!isLoading) {
+                    val manager = recyclerView.layoutManager as LinearLayoutManager
+                    val initPos = manager.findLastVisibleItemPosition()
+                    val finalPos = manager.itemCount
+                    if (finalPos - initPos <= 5) {
+                        viewModel.getPopularMovies()
+                        isLoading = true
+                    }
                 }
             }
         })
 
+        viewModel.popularMovies.observe(viewLifecycleOwner, Observer {
+            isLoading = false
+            if (it.isEmpty()) {
+                //TODO: No hay peliculas, hubo un error. Mostrar un mensaje de error
+            } else {
+                popularMovieAdapter.addMovies(it)
+                fl_movies_container.visibility = View.VISIBLE
+            }
+        })
+    }
+
+    private fun drawSavedMovies() {
         viewModel.savedMovies.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
                 fl_saved_container.visibility = View.VISIBLE
-                val movieAdapter = SavedMovieAdapter(it, this@ListFragment)
-                movieAdapter.stateRestorationPolicy =
+                val saveMovieAdapter = SavedMovieAdapter(it, this@ListFragment)
+                saveMovieAdapter.stateRestorationPolicy =
                     RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 fl_saved_recycler.apply {
-                    adapter = movieAdapter
+                    adapter = saveMovieAdapter
                     layoutManager =
                         LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
                 }
@@ -69,8 +112,6 @@ class ListFragment : Fragment(), PopularMovieAdapter.MovieCallback {
                 fl_saved_container.visibility = View.GONE
             }
         })
-
-
     }
 
     override fun movieClicked(movie: Movie) {

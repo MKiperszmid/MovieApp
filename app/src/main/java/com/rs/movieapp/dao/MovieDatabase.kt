@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.rs.movieapp.model.Movie
 
-@Database(entities = [Movie::class], version = 1)
+@Database(entities = [Movie::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class MovieDatabase : RoomDatabase() {
     abstract val movieDao: MovieDao
@@ -24,7 +24,7 @@ abstract class MovieDatabase : RoomDatabase() {
                         context.applicationContext,
                         MovieDatabase::class.java,
                         DATABASE_NAME
-                    ).build()
+                    ).fallbackToDestructiveMigration().build()
                 }
                 return INSTANCE!!
             }
