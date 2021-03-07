@@ -14,6 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
 import com.rs.movieapp.R
+import com.rs.movieapp.dao.MovieDatabase
+import com.rs.movieapp.dao.MovieRepository
+import com.rs.movieapp.factory.MovieViewmodelFactory
 import com.rs.movieapp.model.Movie
 import com.rs.movieapp.util.PicassoUtil
 import com.squareup.picasso.Picasso
@@ -34,7 +37,10 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity())[MovieViewModel::class.java]
+        val dao = MovieDatabase.instance(requireActivity().application).movieDao
+        val repository = MovieRepository(dao)
+        val factory = MovieViewmodelFactory(repository)
+        viewModel = ViewModelProvider(requireActivity(), factory)[MovieViewModel::class.java]
 
         viewModel.movie.observe(viewLifecycleOwner, Observer {
             drawMovie(it)
@@ -75,13 +81,30 @@ class DetailFragment : Fragment() {
 
         fd_title.text = movie.title
         fd_year.text = movie.getYear().toString()
-        fd_subscribe.setOnClickListener {
-            Toast.makeText(requireContext(), "Not yet implemented", Toast.LENGTH_SHORT).show()
-        }
+
+        drawSubscribeButton(movie)
+
         fd_overview.apply {
             text = movie.overview
             movementMethod = ScrollingMovementMethod()
         }
+    }
+
+    private fun drawSubscribeButton(movie: Movie) {
+        fd_subscribe.setOnClickListener {
+            subscribe(movie)
+        }
+    }
+
+    private fun subscribe(movie: Movie) {
+        val newMovie = movie.copy(saved = true)
+        viewModel.saveMovie(newMovie)
+        //TODO: Ocultar boton y mostrar boton de suscripto
+    }
+
+    private fun unsubscribe(movie: Movie) {
+        viewModel.deleteMovie(movie)
+        //TODO: Ocultar boton y mostrar boton de suscribir
     }
 
     private fun getPalette(bitmap: Bitmap) {
